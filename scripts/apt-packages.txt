@@ -5,7 +5,7 @@ i3lock
 i3blocks
 lightdm
 lightdm-gtk-greeter
-policykit-1
+polkitd
 lxappearance
 picom
 nitrogen
@@ -35,7 +35,7 @@ alacritty
 xterm
 htop
 btop
-neofetch
+fastfetch
 ncdu
 tree
 bash-completion
