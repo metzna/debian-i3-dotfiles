@@ -78,11 +78,4 @@ update-alternatives --set gnome-www-browser /usr/bin/firefox
 # xdg-settings speichert den Browser pro User in ~/.config/mimeapps.list
 runuser -u "$TARGET_USER" -- xdg-settings set default-web-browser firefox.desktop
 
-# -------------------------------------------------
-# Hintergrundbild mit nitrogen setzen
-# -------------------------------------------------
-echo "Setze Hintergrundbild..."
-WALLPAPER="/home/$TARGET_USER/.dotfiles/debian-i3-dotfiles/data/20260205_1246_Image Generation_remix_01kgpszf0xegn8eq4jy3z8795f.png"
-runuser -u "$TARGET_USER" -- nitrogen --set-scaled "$WALLPAPER" --save
-
 echo "Systemumgebung konfiguriert."
