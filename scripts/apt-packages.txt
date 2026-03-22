@@ -41,6 +41,7 @@ tree
 bash-completion
 rofi
 autotiling
+arandr
 dunst
 feh
 vlc
