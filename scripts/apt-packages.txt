@@ -40,6 +40,7 @@ ncdu
 tree
 bash-completion
 rofi
+autotiling
 dunst
 feh
 vlc
