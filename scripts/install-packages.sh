@@ -81,3 +81,48 @@ echo "Installiere Firefox (latest), Sublime Text und Dropbox..."
 apt-get install -y firefox sublime-text dropbox
 
 echo "Installation von Firefox, Sublime Text und Dropbox beendet."
+
+# -------------------------------------------------
+# Teil 3: Obsidian AppImage
+# -------------------------------------------------
+echo "Teil 3: Obsidian AppImage installieren..."
+
+OBSIDIAN_URL=$(curl -s https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest \
+    | grep "browser_download_url" \
+    | grep "\.AppImage" \
+    | grep -v "arm64" \
+    | cut -d '"' -f 4)
+
+if [[ -z "$OBSIDIAN_URL" ]]; then
+    echo "Fehler: Obsidian AppImage URL konnte nicht ermittelt werden."
+    exit 1
+fi
+
+echo "Lade Obsidian herunter: $OBSIDIAN_URL"
+curl -fsSL "$OBSIDIAN_URL" -o /opt/obsidian.AppImage
+chmod +x /opt/obsidian.AppImage
+
+# Icon aus AppImage extrahieren
+echo "Extrahiere Icon..."
+cd /tmp
+/opt/obsidian.AppImage --appimage-extract obsidian.png 2>/dev/null || true
+if [[ -f /tmp/squashfs-root/obsidian.png ]]; then
+    cp /tmp/squashfs-root/obsidian.png /opt/obsidian.png
+fi
+rm -rf /tmp/squashfs-root
+cd /
+
+# Desktop Entry erstellen
+cat > /usr/share/applications/obsidian.desktop <<EOF
+[Desktop Entry]
+Name=Obsidian
+Exec=/opt/obsidian.AppImage %u
+Terminal=false
+Type=Application
+Icon=/opt/obsidian.png
+StartupWMClass=obsidian
+MimeType=x-scheme-handler/obsidian;
+Categories=Office;
+EOF
+
+echo "Obsidian installiert."
