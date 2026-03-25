@@ -7,9 +7,14 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Find the Firefox profile directory — check XDG path first, then legacy
+# Prefer *.default-release over *.default
 PROFILE_DIR=$(find "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox" \
-    -maxdepth 1 -type d \( -name "*.default-release" -o -name "*.default" \) \
-    2>/dev/null | head -1) || true
+    -maxdepth 1 -type d -name "*.default-release" 2>/dev/null | head -1) || true
+
+if [[ -z "$PROFILE_DIR" ]]; then
+    PROFILE_DIR=$(find "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox" \
+        -maxdepth 1 -type d -name "*.default" 2>/dev/null | head -1) || true
+fi
 
 if [[ -z "$PROFILE_DIR" ]]; then
     echo "Fehler: Kein Firefox-Profilordner gefunden."
