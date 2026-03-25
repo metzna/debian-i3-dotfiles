@@ -97,4 +97,13 @@ gtk-font-name=\"Sans 10\"
 EOF
 "
 
+# -------------------------------------------------
+# Lightdm Greeter: einfarbiger Hintergrund
+# -------------------------------------------------
+echo "Konfiguriere lightdm-gtk-greeter..."
+cat > /etc/lightdm/lightdm-gtk-greeter.conf <<EOF
+[greeter]
+background = #084064
+EOF
+
 echo "Systemumgebung konfiguriert."
