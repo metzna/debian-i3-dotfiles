@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run this script AFTER logging into Firefox at least once.
+# Run this script AFTER starting Firefox at least once.
 # It symlinks userChrome.css into the active Firefox profile.
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PROFILES_INI="$HOME/.mozilla/firefox/profiles.ini"
 
-if [[ ! -f "$PROFILES_INI" ]]; then
-    echo "Fehler: $PROFILES_INI nicht gefunden."
+# Firefox uses ~/.config/mozilla/firefox/ (XDG, Mozilla repo)
+# or ~/.mozilla/firefox/ (legacy). Check both.
+if [[ -f "$HOME/.config/mozilla/firefox/profiles.ini" ]]; then
+    FIREFOX_DIR="$HOME/.config/mozilla/firefox"
+elif [[ -f "$HOME/.mozilla/firefox/profiles.ini" ]]; then
+    FIREFOX_DIR="$HOME/.mozilla/firefox"
+else
+    echo "Fehler: profiles.ini nicht gefunden."
     echo "Firefox mindestens einmal starten, dann dieses Skript erneut ausführen."
     exit 1
 fi
+
+PROFILES_INI="$FIREFOX_DIR/profiles.ini"
 
 # Read the default profile path from the [Install...] section
 PROFILE_PATH=$(awk '/^\[Install/ { in_install=1 } in_install && /^Default=/ { sub(/^Default=/, ""); print; exit }' "$PROFILES_INI")
@@ -21,7 +28,7 @@ if [[ -z "$PROFILE_PATH" ]]; then
     exit 1
 fi
 
-PROFILE_DIR="$HOME/.mozilla/firefox/$PROFILE_PATH"
+PROFILE_DIR="$FIREFOX_DIR/$PROFILE_PATH"
 
 if [[ ! -d "$PROFILE_DIR" ]]; then
     echo "Fehler: Profilordner $PROFILE_DIR existiert nicht."
