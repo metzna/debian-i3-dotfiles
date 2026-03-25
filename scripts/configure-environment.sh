@@ -78,4 +78,23 @@ update-alternatives --set gnome-www-browser /usr/bin/firefox
 # xdg-settings speichert den Browser pro User in ~/.config/mimeapps.list
 runuser -u "$TARGET_USER" -- xdg-settings set default-web-browser firefox.desktop
 
+# -------------------------------------------------
+# GTK Theme und Icon Theme
+# -------------------------------------------------
+echo "Setze GTK Theme (Arc-Dark) und Icon Theme (Papirus-Dark)..."
+runuser -u "$TARGET_USER" -- bash -lc "
+mkdir -p \"\$HOME/.config/gtk-3.0\"
+cat > \"\$HOME/.config/gtk-3.0/settings.ini\" <<EOF
+[Settings]
+gtk-theme-name=Arc-Dark
+gtk-icon-theme-name=Papirus-Dark
+gtk-font-name=Sans 10
+EOF
+cat > \"\$HOME/.gtkrc-2.0\" <<EOF
+gtk-theme-name=\"Arc-Dark\"
+gtk-icon-theme-name=\"Papirus-Dark\"
+gtk-font-name=\"Sans 10\"
+EOF
+"
+
 echo "Systemumgebung konfiguriert."

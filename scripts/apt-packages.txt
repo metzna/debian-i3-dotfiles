@@ -7,6 +7,8 @@ lightdm
 lightdm-gtk-greeter
 polkitd
 lxappearance
+arc-theme
+papirus-icon-theme
 picom
 nitrogen
 xfce4-screenshooter
