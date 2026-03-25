@@ -33,6 +33,7 @@ udiskie
 git
 gitk
 nano
+quarto
 alacritty
 xterm
 htop
