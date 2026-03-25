@@ -6,32 +6,14 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Firefox uses ~/.config/mozilla/firefox/ (XDG, Mozilla repo)
-# or ~/.mozilla/firefox/ (legacy). Check both.
-if [[ -f "$HOME/.config/mozilla/firefox/profiles.ini" ]]; then
-    FIREFOX_DIR="$HOME/.config/mozilla/firefox"
-elif [[ -f "$HOME/.mozilla/firefox/profiles.ini" ]]; then
-    FIREFOX_DIR="$HOME/.mozilla/firefox"
-else
-    echo "Fehler: profiles.ini nicht gefunden."
+# Find the Firefox profile directory — check XDG path first, then legacy
+PROFILE_DIR=$(find "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox" \
+    -maxdepth 1 -type d \( -name "*.default-release" -o -name "*.default" \) \
+    2>/dev/null | head -1)
+
+if [[ -z "$PROFILE_DIR" ]]; then
+    echo "Fehler: Kein Firefox-Profilordner gefunden."
     echo "Firefox mindestens einmal starten, dann dieses Skript erneut ausführen."
-    exit 1
-fi
-
-PROFILES_INI="$FIREFOX_DIR/profiles.ini"
-
-# Read the default profile path from the [Install...] section
-PROFILE_PATH=$(awk '/^\[Install/ { in_install=1 } in_install && /^Default=/ { sub(/^Default=/, ""); print; exit }' "$PROFILES_INI")
-
-if [[ -z "$PROFILE_PATH" ]]; then
-    echo "Fehler: Kein Standard-Profil in $PROFILES_INI gefunden."
-    exit 1
-fi
-
-PROFILE_DIR="$FIREFOX_DIR/$PROFILE_PATH"
-
-if [[ ! -d "$PROFILE_DIR" ]]; then
-    echo "Fehler: Profilordner $PROFILE_DIR existiert nicht."
     exit 1
 fi
 
