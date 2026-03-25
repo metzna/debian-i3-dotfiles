@@ -102,16 +102,6 @@ echo "Lade Obsidian herunter: $OBSIDIAN_URL"
 curl -fsSL "$OBSIDIAN_URL" -o /opt/obsidian.AppImage
 chmod +x /opt/obsidian.AppImage
 
-# Icon aus AppImage extrahieren
-echo "Extrahiere Icon..."
-cd /tmp
-/opt/obsidian.AppImage --appimage-extract obsidian.png 2>/dev/null || true
-if [[ -f /tmp/squashfs-root/obsidian.png ]]; then
-    cp /tmp/squashfs-root/obsidian.png /opt/obsidian.png
-fi
-rm -rf /tmp/squashfs-root
-cd /
-
 # Desktop Entry erstellen
 cat > /usr/share/applications/obsidian.desktop <<EOF
 [Desktop Entry]
@@ -119,7 +109,7 @@ Name=Obsidian
 Exec=/opt/obsidian.AppImage %u
 Terminal=false
 Type=Application
-Icon=/opt/obsidian.png
+Icon=obsidian
 StartupWMClass=obsidian
 MimeType=x-scheme-handler/obsidian;
 Categories=Office;
