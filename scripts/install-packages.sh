@@ -116,3 +116,25 @@ Categories=Office;
 EOF
 
 echo "Obsidian installiert."
+
+# -------------------------------------------------
+# Teil 4: Quarto .deb
+# -------------------------------------------------
+echo "Teil 4: Quarto installieren..."
+
+QUARTO_URL=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest \
+    | grep "browser_download_url" \
+    | grep "amd64\.deb" \
+    | cut -d '"' -f 4)
+
+if [[ -z "$QUARTO_URL" ]]; then
+    echo "Fehler: Quarto .deb URL konnte nicht ermittelt werden."
+    exit 1
+fi
+
+echo "Lade Quarto herunter: $QUARTO_URL"
+curl -fsSL "$QUARTO_URL" -o /tmp/quarto.deb
+dpkg -i /tmp/quarto.deb
+rm /tmp/quarto.deb
+
+echo "Quarto installiert."

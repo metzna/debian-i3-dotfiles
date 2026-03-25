@@ -33,7 +33,6 @@ udiskie
 git
 gitk
 nano
-quarto
 r-base
 alacritty
 xterm
