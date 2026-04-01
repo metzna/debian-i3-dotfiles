@@ -25,8 +25,9 @@ usermod -aG sudo laurenz
 exit
 ```
 
-### 2. Neu als laurenz einloggen
+### 2. Neu als nutzer einloggen
 
+Achtung: der benutzername ist in den dotfiles hardcoded. bei bedarf muss dieser einfach per suchen-ersetzen global ersetzt werden.
 Die sudo-Gruppe wird erst nach einem neuen Login aktiv.
 
 ### 3. Repo klonen
